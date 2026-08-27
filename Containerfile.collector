@@ -45,10 +45,29 @@ ENV DEBIAN_FRONTEND=noninteractive
 # `signed-by` scopes the key to this one repo instead of the global keyring.
 COPY deploy/uofc-cs-aptly.asc /etc/apt/keyrings/uofc-cs-aptly.asc
 
+# The CS repo's slurm packages are published under a "jammy" distribution but
+# are actually built against focal: slurm-smd depends on libjson-c4, which
+# Ubuntu replaced with libjson-c5 in 22.04. cluster-mgmt only satisfies that
+# dependency because the host was upgraded 20.04 -> 22.04 and kept the orphaned
+# library behind (its .so is dated 2020, and no repo provides the package any
+# more). A clean jammy image has no such leftover, so apt fails with
+# "libjson-c4 ... but it is not installable".
+#
+# Rather than rely on that accident, install the one focal package explicitly.
+# It is the ONLY gap — every other dependency in the chain (libhdf5-103,
+# libjwt0, libfreeipmi17, libmariadb3, libhwloc15, ...) resolves on jammy.
+# If the focal pool is ever pruned this URL breaks loudly at build time, and
+# `doctor` compares client and server versions on every run regardless.
+ARG LIBJSON_C4_DEB=http://archive.ubuntu.com/ubuntu/pool/main/j/json-c/libjson-c4_0.13.1+dfsg-7ubuntu0.3_amd64.deb
+
 RUN chmod 0644 /etc/apt/keyrings/uofc-cs-aptly.asc \
     && echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/uofc-cs-aptly.asc] http://s10.cs.uchicago.edu/aptly/cs-release jammy jammy" \
       > /etc/apt/sources.list.d/uofc-cs.list \
     && apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates curl \
+    && curl -fsSL -o /tmp/libjson-c4.deb "${LIBJSON_C4_DEB}" \
+    && dpkg -i /tmp/libjson-c4.deb \
+    && rm -f /tmp/libjson-c4.deb \
     && apt-get install -y --no-install-recommends \
       ${SLURM_CLIENT_PKG} \
       munge \
