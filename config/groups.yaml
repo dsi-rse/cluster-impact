@@ -17,30 +17,98 @@
 #   clinic  DSI Clinic project team
 #   core    shared/institutional service account
 
-# TODO(bennett): populate from `sacctmgr show account -P`. Every account you
-# leave out still counts toward totals but shows up unnamed, so an empty file
-# is a safe (if boring) starting state.
+# CLASSIFICATION vs DISCLOSURE — these are separate here.
+#
+# An entry needs only `department` and `type`. That is enough to count it on
+# /community/ ("2 labs & courses", "4 departments") without ever naming it.
+# A name is published ONLY if the entry also has `display_name` and does not
+# set `publish_name: false` — and even then the k-anonymity floor still applies.
+#
+# Every entry below sets publish_name: false, per Bennett 2026-08-27: fill in
+# the numbers, name nobody.
+#
+# type: lab | course | clinic | core | other
+#   lab     research group under a PI      } counted as "labs & courses"
+#   course  teaching allocation            }
+#   clinic  DSI Clinic project team        }
+#   core    shared/institutional account   - not counted; not a group
+#   other   personal or unclassified       - not counted
 
-accounts: {}
-  # Example of the intended shape — delete once real entries land:
-  #
-  # kolar-lab:
-  #   display_name: "Kolar Lab"
-  #   department: "Statistics"
-  #   division: "Physical Sciences Division"
-  #   type: lab
-  #
-  # dsi-clinic:
-  #   display_name: "DSI Clinic"
-  #   department: "Data Science Institute"
-  #   division: "Data Science Institute"
-  #   type: clinic
-  #
-  # cmsc-25025:
-  #   display_name: "CMSC 25025 — Machine Learning"
-  #   department: "Computer Science"
-  #   division: "Physical Sciences Division"
-  #   type: course
+# Departments the cluster serves. DECLARED, NOT DERIVED: Slurm records no
+# department, so unlike everything else on this site this figure is an operator
+# assertion rather than a measurement. Stated as such on the Community tile and
+# in /methodology/. Source: Bennett, 2026-08-27.
+departments_served:
+  - "Data Science Institute"
+  - "Computer Science"
+  - "Mathematics"
+  - "Statistics"
+
+accounts:
+  # --- shared / institutional -------------------------------------------
+  # Holds the overwhelming majority of usage. Not a "group", so not counted as
+  # a lab; if courses run on this cluster they run inside here and are NOT
+  # separable from accounting data.
+  general_group:
+    department: "Data Science Institute"
+    type: core
+    publish_name: false
+
+  root:
+    department: "Data Science Institute"
+    type: core
+    publish_name: false
+
+  # --- research groups --------------------------------------------------
+  # TODO(bennett): CONFIRM DEPARTMENTS. Both are inferred from the account
+  # name alone and drive the "labs & courses" count, so a wrong type changes a
+  # published number. Neither name is published.
+  veitch_group:
+    department: "Statistics"        # TODO(bennett): Statistics or DSI?
+    type: lab
+    publish_name: false
+
+  __litian-lab:
+    department: "Computer Science"   # TODO(bennett): guessed from the name
+    type: lab
+    publish_name: false
+
+  # TODO(bennett): is `dfields` a lab or one person's allocation? Classified
+  # `other` for now, which UNDERCOUNTS labs by one if it is a group. Change to
+  # `type: lab` with the right department if so.
+  dfields:
+    department: "Data Science Institute"
+    type: other
+    publish_name: false
+
+  # --- personal allocations ---------------------------------------------
+  # These account names ARE usernames, which is exactly why nothing here is
+  # ever published by name. They are individuals, not groups, so they do not
+  # count toward "labs & courses".
+  junyuren:
+    department: "Data Science Institute"
+    type: other
+    publish_name: false
+  sowonjeong:
+    department: "Data Science Institute"
+    type: other
+    publish_name: false
+  yaoluo:
+    department: "Data Science Institute"
+    type: other
+    publish_name: false
+  yatingliu:
+    department: "Data Science Institute"
+    type: other
+    publish_name: false
+  yeojinjung:
+    department: "Data Science Institute"
+    type: other
+    publish_name: false
+  zixuanwu:
+    department: "Data Science Institute"
+    type: other
+    publish_name: false
 
 # Label used for everything not named above.
 fallback:

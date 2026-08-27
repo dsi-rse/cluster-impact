@@ -159,11 +159,39 @@ No real workload reaches it.
 
 ## Cloud cost avoided
 
-Allocated GPU-hours per model × that model's public on-demand list rate. The
-rate table, its source, and its retrieval date are published on the
+Allocated GPU-hours × a public on-demand list rate. The rate table, its
+source, and its retrieval date are published on the
 [Value Delivered]({{ '/value/' | relative_url }}) page, which also explains at
 length what the figure does and does not mean. The collector refuses to
 compute it at all unless a source and an as-of date are recorded.
+
+**It is currently an estimate, not an exact figure.** The exact calculation is
+GPU-hours *per model* × that model's rate, but Slurm's accounting on this
+cluster records `gres/gpu` with no per-model breakdown
+(`AccountingStorageTRES`), so a GPU-hour cannot be attributed to a specific
+card. Each period's hours are therefore priced at the average rate of the
+fleet **installed in that period**, weighted by unit counts. The published
+figure carries a basis of `blended` to mark this; it would read `per_model` if
+typed accounting were ever enabled. Because the newest and most expensive
+cards are also the most contended, this assumption most likely understates.
+
+## Counting groups and departments
+
+Two figures on [Community]({{ '/community/' | relative_url }}) are counts of
+groups, and they are computed differently from each other on purpose.
+
+**Labs & courses** is measured. It counts the Slurm accounts classified as a
+research group, course, or clinic that ran at least one job in the last twelve
+months. A group is counted whether or not it can be *named* — naming requires
+both an operator's explicit decision and the k-anonymity floor, while counting
+requires neither and discloses nothing. A one-person lab is therefore counted
+but never identified.
+
+**Departments** is declared, not measured. Slurm records no department for a
+job or an account, so unlike every other number on this site it comes from a
+list maintained by the cluster operators in `config/groups.yaml` rather than
+from the data. It is published because it is useful and true, and labelled
+here because it is a different kind of claim.
 
 ## Storage
 
@@ -180,10 +208,14 @@ meaningless deltas.
   Aggregates are committed to git precisely so this horizon stops receding —
   but data purged before this site existed is gone.
 - **Monthly and yearly wait percentiles are approximations** (see above).
-- **Storage I/O volume** is published as a daily total (read/write bytes)
-  once Prometheus is configured with `prometheus.queries.storage_read_bytes`
-  and `storage_write_bytes` in `sources.yaml`. Until then the chart shows
-  "unavailable".
+- **Storage capacity and I/O are both unavailable.** Capacity needs root on
+  the storage nodes, and I/O needs Prometheus; as of 2026-08 the collector host
+  can reach neither (`s10:9090` is firewalled in the collector's direction, and
+  `root@builder` refuses its key). Both panels show "unavailable" rather than a
+  stale or invented number.
+- **Demand by GPU model cannot be charted** for the same accounting reason
+  described under Cloud cost avoided: the model that served a GPU-hour is not
+  recorded.
 - **Publication and grant outcomes** are not tracked here. They are the
   metric that matters most and the one this tooling cannot reach.
 

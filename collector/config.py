@@ -143,6 +143,11 @@ class GroupIdentity:
     department: str
     division: str
     type: str
+    # Classification and disclosure are separate decisions. An account with
+    # publish_name=False still counts toward the labs/courses and department
+    # figures on /community/, but its name never reaches the site — it stays in
+    # the "Other" bucket exactly as if it were absent from the allowlist.
+    publish_name: bool = True
 
 
 @dataclass
@@ -151,14 +156,29 @@ class GroupsConfig:
 
     accounts: dict[str, GroupIdentity]
     fallback: GroupIdentity
+    # Declared, not derived — Slurm records no department, so this is an
+    # operator assertion. /methodology/ says so explicitly.
+    departments_served: list[str] = field(default_factory=list)
 
     def resolve(self, account: str | None) -> GroupIdentity:
         if not account:
             return self.fallback
         return self.accounts.get(account.strip().lower(), self.fallback)
 
+    def classify(self, account: str | None) -> GroupIdentity | None:
+        """The allowlist entry for an account, whether or not it may be named.
+
+        Counting is not disclosure: this is what lets /community/ report how
+        many labs used the cluster without naming any of them.
+        """
+        if not account:
+            return None
+        return self.accounts.get(account.strip().lower())
+
     def is_named(self, account: str | None) -> bool:
-        return bool(account) and account.strip().lower() in self.accounts
+        """Whether this account's name may be published."""
+        entry = self.classify(account)
+        return entry is not None and entry.publish_name
 
 
 @dataclass
@@ -266,19 +286,29 @@ def load_groups(path: Path) -> GroupsConfig:
     for account, spec in (raw.get("accounts") or {}).items():
         if not isinstance(spec, dict):
             raise ConfigError(f"{path}: account {account!r} must map to a mapping")
-        missing = [k for k in ("display_name", "department", "division", "type") if k not in spec]
+        # department and type are what the counts need. display_name is required
+        # only to NAME a group, so an entry may classify without naming.
+        missing = [k for k in ("department", "type") if k not in spec]
         if missing:
             raise ConfigError(
                 f"{path}: account {account!r} is missing required field(s): {', '.join(missing)}"
             )
+        publish_name = bool(spec.get("publish_name", "display_name" in spec))
+        if publish_name and not spec.get("display_name"):
+            raise ConfigError(
+                f"{path}: account {account!r} sets publish_name but has no display_name"
+            )
         accounts[str(account).strip().lower()] = GroupIdentity(
-            display_name=spec["display_name"],
+            display_name=spec.get("display_name") or fallback.display_name,
             department=spec["department"],
-            division=spec["division"],
+            division=spec.get("division") or fallback.division,
             type=spec["type"],
+            publish_name=publish_name,
         )
 
-    return GroupsConfig(accounts=accounts, fallback=fallback)
+    departments = [str(d) for d in (raw.get("departments_served") or []) if d]
+
+    return GroupsConfig(accounts=accounts, fallback=fallback, departments_served=departments)
 
 
 def load_sources(path: Path) -> SourcesConfig:

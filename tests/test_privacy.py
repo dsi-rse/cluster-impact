@@ -1,5 +1,5 @@
 import json
-from datetime import datetime
+from datetime import date, datetime
 from pathlib import Path
 
 import pytest
@@ -203,3 +203,83 @@ def _operator_strings(cfg):
         if pricing.get(key):
             values.append(str(pricing[key]))
     return values
+
+
+# ------------------------------------------- classification vs disclosure
+# An account may be classified (so it counts on /community/) without being
+# named. This is the property that lets the site report "2 labs" while naming
+# no lab, and it must hold even when the group clears k-anonymity easily.
+
+
+def _classified_only_groups():
+    from collector.config import GroupIdentity, GroupsConfig
+
+    fallback = GroupIdentity("Other", "Other", "Other", "other")
+    return GroupsConfig(
+        accounts={
+            "quiet-lab": GroupIdentity(
+                display_name="Should Never Appear",
+                department="Statistics",
+                division="Other",
+                type="lab",
+                publish_name=False,
+            )
+        },
+        fallback=fallback,
+        departments_served=["Statistics", "Computer Science"],
+    )
+
+
+def test_classified_but_unnamed_account_is_not_published_by_name():
+    from collector.transform.aggregate import DayAggregate, GroupUsage
+
+    groups = _classified_only_groups()
+    agg = DayAggregate(day=date(2026, 8, 1))
+    usage = GroupUsage()
+    usage.gpu_seconds = 3600.0 * 10
+    usage.jobs = 9
+    usage.users = {"a", "b", "c", "d", "e"}  # comfortably above k=3
+    agg.by_account["quiet-lab"] = usage
+
+    record = privacy.scrub_day(agg, groups, k_anonymity=3)
+    names = [g["name"] for g in record["groups"]]
+    assert names == ["Other"]
+    assert "Should Never Appear" not in json.dumps(record)
+
+
+def test_classify_sees_the_account_even_though_is_named_does_not():
+    groups = _classified_only_groups()
+    assert groups.classify("quiet-lab").type == "lab"
+    assert groups.is_named("quiet-lab") is False
+    # An account absent from the allowlist is neither classified nor named.
+    assert groups.classify("stranger") is None
+    assert groups.is_named("stranger") is False
+
+
+def test_publish_name_defaults_from_presence_of_display_name(tmp_path):
+    from collector.config import load_groups
+
+    path = tmp_path / "groups.yaml"
+    path.write_text(
+        "departments_served: [Statistics]\n"
+        "accounts:\n"
+        "  named-lab:\n"
+        "    display_name: Named Lab\n"
+        "    department: Statistics\n"
+        "    type: lab\n"
+        "  counted-lab:\n"
+        "    department: Statistics\n"
+        "    type: lab\n"
+        "fallback:\n"
+        "  display_name: Other\n"
+        "  department: Other\n"
+        "  division: Other\n"
+        "  type: other\n"
+    )
+    groups = load_groups(path)
+    # A display_name opts in; its absence means classify-only.
+    assert groups.accounts["named-lab"].publish_name is True
+    assert groups.accounts["counted-lab"].publish_name is False
+    # The unnamed one still resolves to a safe display value.
+    assert groups.accounts["counted-lab"].display_name == "Other"
+    assert groups.departments_served == ["Statistics"]

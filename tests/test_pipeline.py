@@ -87,12 +87,28 @@ def test_summary_reports_both_denominators(tmp_path):
     assert summary["availability_ytd"] is not None
 
 
-def test_summary_counts_only_named_groups_as_labs(tmp_path):
-    _, _, summary_path = _run(tmp_path)
+def test_labs_are_counted_even_when_they_cannot_be_named(tmp_path):
+    """Counting is not disclosure.
+
+    solo-lab has one user, so k-anonymity forbids naming it — but it is still a
+    lab that used the cluster, and the /community/ count says so. That is the
+    whole point of separating classification from disclosure: the old behaviour
+    tied the count to what could be named and undercounted real breadth of use.
+    unlisted-lab is absent from the allowlist entirely, so it is neither
+    classified nor counted.
+    """
+    _, data_dir, summary_path = _run(tmp_path)
     summary = json.loads(summary_path.read_text())
-    # Kolar Lab, DSI Clinic, CMSC 25025. Solo Lab and unlisted-lab collapse.
-    assert summary["labs_named_trailing_year"] == 3
-    assert summary["departments_trailing_year"] == 3
+
+    # kolar-lab, dsi-clinic, cmsc-25025 AND solo-lab.
+    assert summary["labs_courses_trailing_year"] == 4
+
+    # Declared, not derived from job data.
+    assert summary["departments_served"] == 3
+
+    # And solo-lab is still not named anywhere in the published tree.
+    blob = json.dumps([json.loads(p.read_text()) for p in sorted(data_dir.rglob("*.json"))])
+    assert "Solo Lab" not in blob
 
 
 def test_k_anonymity_is_applied_per_published_bucket(tmp_path):

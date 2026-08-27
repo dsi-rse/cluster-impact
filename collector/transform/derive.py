@@ -527,7 +527,6 @@ def build_summary(
         trailing_groups = groups_for_period(state, groups, min(days), max(days), k_anonymity)
     if trailing_groups is None:
         trailing_groups = _merge_groups(trailing)
-    named_groups = [g for g in trailing_groups if g["type"] != "other"]
 
     summary: dict[str, Any] = {
         "generated": None,  # stamped by publish.py
@@ -542,8 +541,11 @@ def build_summary(
         "availability_ytd": round(ytd_available / ytd_reported, 4) if ytd_reported > 0 else None,
         "jobs_ytd": int(_sum(ytd, "jobs", "total")),
         "success_rate_ytd": None,
-        "labs_named_trailing_year": len(named_groups),
-        "departments_trailing_year": len({g["department"] for g in named_groups}),
+        # Counts, not disclosures: how many labs/courses used the cluster, and
+        # how many departments it serves. Neither names anybody. Populated
+        # below from the account index where one exists.
+        "labs_courses_trailing_year": None,
+        "departments_served": len(groups.departments_served) if groups else None,
         "total_gpu_years": records.get("total_gpu_years"),
         "unique_users_trailing_year": None,
         "cloud_cost_avoided_ytd_usd": None,
@@ -561,6 +563,16 @@ def build_summary(
     if state is not None and trailing:
         days = [date.fromisoformat(r["date"]) for r in trailing]
         summary["unique_users_trailing_year"] = len(state.users_between(min(days), max(days)))
+
+        if groups is not None and state.has_account_index():
+            active = state.accounts_between(min(days), max(days))
+            counted = {
+                account
+                for account in active
+                if (entry := groups.classify(account)) is not None
+                and entry.type in {"lab", "course", "clinic"}
+            }
+            summary["labs_courses_trailing_year"] = len(counted)
 
     cost, basis = cost_avoided(
         _merge_maps(ytd, "gpu_hours_by_model"),

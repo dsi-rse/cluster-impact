@@ -4,6 +4,11 @@
 # It is allowlisted but must still collapse into "Other" because k-anonymity
 # outranks the allowlist. unlisted-lab is absent entirely and must also
 # collapse, despite having enough users.
+departments_served:
+  - "Statistics"
+  - "Data Science Institute"
+  - "Computer Science"
+
 accounts:
   kolar-lab:
     display_name: "Kolar Lab"

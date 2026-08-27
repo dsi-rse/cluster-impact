@@ -22,6 +22,14 @@ ExecStartPre=/usr/bin/flock -n /var/lock/cluster-impact.lock true
 # is a fast-forward in the common case.
 ExecStartPre=/usr/bin/git -C /var/lib/cluster-impact/repo pull --rebase --quiet
 
+# Rebuild after pulling. The collector's code AND config are COPY'd into the
+# image, so pulling the repo alone changes nothing the container actually runs —
+# without this, deployed behaviour silently diverges from main forever. Docker's
+# layer cache makes this near-instant when nothing changed, and a build failure
+# aborts the oneshot loudly rather than collecting with stale code.
+ExecStartPre=/usr/bin/docker build -q -f Containerfile.collector \
+    -t cluster-impact-collector:latest /var/lib/cluster-impact/repo
+
 # Runtime is docker, not podman. podman 5.5.0 is installed on cluster-mgmt but
 # non-functional: its apt source was purged by Puppet, leaving netavark and
 # aardvark-dns uninstallable, so every podman command fails. Docker 27.4.0 is

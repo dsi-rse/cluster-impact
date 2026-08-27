@@ -14,8 +14,8 @@ institutional infrastructure from one lab's private machine.
 
 <div class="stat-grid">
   {% include stat-tile.html label="Researchers" value=d.unique_users_trailing_year note="Distinct people who ran at least one job in the last 12 months." %}
-  {% include stat-tile.html label="Labs & courses" value=s.labs_named_trailing_year note="Named groups meeting the anonymity threshold." %}
-  {% include stat-tile.html label="Departments" value=s.departments_trailing_year note="Distinct departments represented." %}
+  {% include stat-tile.html label="Labs & courses" value=s.labs_courses_trailing_year note="Research groups and teaching allocations that ran jobs in the last 12 months. Counted, never named." %}
+  {% include stat-tile.html label="Departments" value=s.departments_served note="Departments the cluster serves. Declared by the operators, not derived from job data — see Methodology." %}
 </div>
 
 <div class="data-state data-state--info">
