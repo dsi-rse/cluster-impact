@@ -1,12 +1,12 @@
 {
   "available": true,
   "first_day": "2023-05-04",
-  "last_day": "2026-08-06",
-  "days_observed": 1191,
-  "total_gpu_hours": 1920529.63,
-  "total_gpu_years": 219.24,
-  "total_cpu_hours": 15090443.22,
-  "total_jobs": 1400788,
+  "last_day": "2026-08-27",
+  "days_observed": 1212,
+  "total_gpu_hours": 1989997.64,
+  "total_gpu_years": 227.17,
+  "total_cpu_hours": 16307672.98,
+  "total_jobs": 1565506,
   "entries": [
     {
       "metric": "largest_job_gpus",
@@ -25,13 +25,13 @@
     },
     {
       "metric": "max_nodes_in_job",
-      "value": 16,
-      "date": "2025-10-20"
+      "value": 20,
+      "date": "2026-08-25"
     },
     {
       "metric": "busiest_day_gpu_hours",
-      "value": 4969.39,
-      "date": "2026-05-22"
+      "value": 4980.44,
+      "date": "2026-08-08"
     },
     {
       "metric": "most_jobs_in_a_day",
@@ -44,6 +44,6 @@
       "date": "2026-05-05"
     }
   ],
-  "researchers_all_time": 478,
-  "generated": "2026-08-06T16:21:52-05:00"
+  "researchers_all_time": 479,
+  "generated": "2026-08-27T20:27:41+00:00"
 }
