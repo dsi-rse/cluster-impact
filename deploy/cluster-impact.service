@@ -7,6 +7,13 @@ Wants=network-online.target
 [Service]
 Type=oneshot
 
+# ExecStartPre's git runs as a unit process, not in the container, so it needs
+# the deploy key explicitly — root's default identity has no GitHub access and
+# the pull fails with "Permission denied (publickey)", which aborts the whole
+# oneshot. known_hosts lives under /etc rather than /root because ProtectHome
+# below makes /root unreadable to this unit.
+Environment=GIT_SSH_COMMAND=ssh -i /etc/cluster-impact/deploy_key -o IdentitiesOnly=yes -o UserKnownHostsFile=/etc/cluster-impact/known_hosts
+
 # A long backfill and a nightly run must not overlap: both write the same
 # month files and the same on-cluster state.
 ExecStartPre=/usr/bin/flock -n /var/lock/cluster-impact.lock true
@@ -27,7 +34,7 @@ ExecStart=/usr/bin/docker run --rm --name cluster-impact-collect \
     -v /var/lib/cluster-impact/raw:/var/lib/cluster-impact/raw \
     -v /var/lib/cluster-impact/repo:/repo \
     -v /etc/cluster-impact/deploy_key:/secrets/deploy_key:ro \
-    -v /root/.ssh/known_hosts:/root/.ssh/known_hosts:ro \
+    -v /etc/cluster-impact/known_hosts:/root/.ssh/known_hosts:ro \
     cluster-impact-collector:latest \
     collect
 
