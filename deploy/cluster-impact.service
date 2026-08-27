@@ -15,7 +15,12 @@ ExecStartPre=/usr/bin/flock -n /var/lock/cluster-impact.lock true
 # is a fast-forward in the common case.
 ExecStartPre=/usr/bin/git -C /var/lib/cluster-impact/repo pull --rebase --quiet
 
-ExecStart=/usr/bin/podman run --rm --name cluster-impact-collect \
+# Runtime is docker, not podman. podman 5.5.0 is installed on cluster-mgmt but
+# non-functional: its apt source was purged by Puppet, leaving netavark and
+# aardvark-dns uninstallable, so every podman command fails. Docker 27.4.0 is
+# present and working on the same host. If podman is ever repaired in Puppet,
+# this line and Containerfile.collector's header are the only things to change.
+ExecStart=/usr/bin/docker run --rm --name cluster-impact-collect \
     --network host \
     -v /etc/slurm/slurm.conf:/etc/slurm/slurm.conf:ro \
     -v /run/munge/munge.socket.2:/run/munge/munge.socket.2:ro \
@@ -23,7 +28,7 @@ ExecStart=/usr/bin/podman run --rm --name cluster-impact-collect \
     -v /var/lib/cluster-impact/repo:/repo \
     -v /etc/cluster-impact/deploy_key:/secrets/deploy_key:ro \
     -v /root/.ssh/known_hosts:/root/.ssh/known_hosts:ro \
-    localhost/cluster-impact-collector:latest \
+    cluster-impact-collector:latest \
     collect
 
 TimeoutStartSec=3h

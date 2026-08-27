@@ -1,9 +1,9 @@
-# Collector image. Runs on-cluster under podman, on a host that can reach
-# slurmdbd, the storage nodes, LDAP/Foreman, and Prometheus.
+# Collector image. Runs on-cluster, on a host that can reach slurmdbd, the
+# storage nodes, LDAP/Foreman, and Prometheus.
 #
-#   podman build -f Containerfile.collector -t cluster-impact-collector .
+#   docker build -f Containerfile.collector -t cluster-impact-collector .
 #
-#   podman run --rm --network host \
+#   docker run --rm --network host \
 #     -v /etc/slurm/slurm.conf:/etc/slurm/slurm.conf:ro \
 #     -v /run/munge/munge.socket.2:/run/munge/munge.socket.2:ro \
 #     -v /var/lib/cluster-impact/raw:/var/lib/cluster-impact/raw \
@@ -11,29 +11,56 @@
 #     -v /etc/cluster-impact/deploy_key:/secrets/deploy_key:ro \
 #     cluster-impact-collector collect
 #
-# The Slurm client must be close enough in version to the cluster's slurmctld.
-# `cli.py doctor` compares them and fails loudly on a mismatch; the
-# `--from-dump` path is the fallback if they ever diverge.
+# WHY ubuntu:22.04 AND NOT python:3.12-slim
+#
+# The Slurm client must match the cluster's slurmctld closely or the accounting
+# queries fail; `cli.py doctor` compares them and fails loudly on a mismatch.
+# The only package that matches is `slurm-smd-client` from the CS techstaff
+# aptly repo, and that repo publishes **jammy only** (noble and focal both 404).
+# Debian bookworm — which python:3.12-slim is built on — can only offer Debian's
+# own `slurm-client`, which is generations behind slurmctld.
+#
+# Consequence: Python is jammy's 3.10, not 3.12, which is below the
+# `requires-python = ">=3.11"` in pyproject.toml. That bound is not exercised
+# here because the collector is run as `python3 -m collector.cli` rather than
+# pip-installed as a package; the full 40-month backfill was completed on 3.10.
+# If the collector ever grows genuine 3.11+ syntax, this is the thing that
+# breaks, and the fix is a newer base once the CS repo publishes for it.
+#
+# The client version is deliberately NOT pinned. It resolves from the same repo
+# the cluster's own nodes install from, so a rebuild tracks the cluster rather
+# than drifting away from it. Pass SLURM_CLIENT_PKG to pin if you must.
+FROM ubuntu:22.04
 
-FROM python:3.12-slim
+ARG SLURM_CLIENT_PKG=slurm-smd-client
+ENV DEBIAN_FRONTEND=noninteractive
 
-ARG SLURM_CLIENT_PKG=slurm-client
+# The signing key for the CS aptly repo, committed alongside this file so the
+# build needs no `trusted=yes` and no out-of-band fetch.
+COPY deploy/uofc-cs-aptly.asc /etc/apt/trusted.gpg.d/uofc-cs-aptly.asc
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN echo "deb [arch=amd64] http://s10.cs.uchicago.edu/aptly/cs-release jammy jammy" \
+      > /etc/apt/sources.list.d/uofc-cs.list \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
       ${SLURM_CLIENT_PKG} \
       munge \
       git \
       openssh-client \
       ca-certificates \
       zstd \
-      libldap-2.5-0 \
+      python3 \
+      python3-pip \
+      python3-yaml \
+      python3-ldap \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-COPY pyproject.toml ./
-RUN pip install --no-cache-dir \
-      "httpx>=0.27" "PyYAML>=6.0" "python-ldap>=3.4" "jsonschema>=4.21"
+# httpx is not packaged for jammy at a usable version; PyYAML and python-ldap
+# come from apt above so nothing has to compile here.
+RUN pip3 install --no-cache-dir --break-system-packages "httpx>=0.27" 2>/dev/null \
+    || pip3 install --no-cache-dir "httpx>=0.27"
 
 COPY collector/ ./collector/
 COPY config/ ./config/
@@ -43,5 +70,5 @@ ENV PYTHONUNBUFFERED=1 \
     CLUSTER_IMPACT_REPO=/repo \
     GIT_SSH_COMMAND="ssh -i /secrets/deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new"
 
-ENTRYPOINT ["python", "-m", "collector.cli"]
+ENTRYPOINT ["python3", "-m", "collector.cli"]
 CMD ["collect"]
