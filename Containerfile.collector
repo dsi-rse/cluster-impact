@@ -81,6 +81,16 @@ RUN chmod 0644 /etc/apt/keyrings/uofc-cs-aptly.asc \
       python3-ldap \
     && rm -rf /var/lib/apt/lists/*
 
+# slurm.conf names `SlurmUser=slurm`, and the client refuses to parse the config
+# at all if that account is missing — "Invalid user for SlurmUser slurm, ignored"
+# followed by "Unable to process configuration file". slurm-smd-client does not
+# create the account (the server packages do), so the image must.
+#
+# The uid/gid match cluster-mgmt so anything that compares them lines up; the
+# account is nologin and owns nothing. munge is created by its own package, and
+# the mounted socket is world-writable, so root in the container can use it.
+RUN groupadd -g 64030 slurm && useradd -u 64030 -g 64030 -M -N -s /usr/sbin/nologin slurm
+
 WORKDIR /app
 
 # httpx is not packaged for jammy at a usable version; PyYAML and python-ldap
