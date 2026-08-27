@@ -2601,63 +2601,63 @@
       "period": "2026-08",
       "days": 27,
       "gpu_hours": {
-        "allocated": 84940.51,
+        "allocated": 84959.69,
         "available": 93899.36,
         "reported": 104977.99,
         "down": 11078.62
       },
-      "cpu_hours_allocated": 1474864.2,
+      "cpu_hours_allocated": 1474971.97,
       "utilization": {
-        "available": 0.9046,
-        "installed": 0.8091,
+        "available": 0.9048,
+        "installed": 0.8093,
         "availability": 0.8945
       },
       "jobs": {
-        "total": 186954,
+        "total": 186952,
         "by_state": {
-          "CANCELLED": 6026,
+          "CANCELLED": 6016,
           "COMPLETED": 160327,
           "FAILED": 15807,
           "NODE_FAIL": 17,
           "OUT_OF_MEMORY": 256,
-          "PENDING": 89,
-          "PREEMPTED": 17,
-          "REQUEUED": 28,
+          "PENDING": 88,
+          "PREEMPTED": 22,
+          "REQUEUED": 32,
           "RUNNING": 150,
           "TIMEOUT": 4237
         },
         "by_size": {
-          "1": 27383,
+          "1": 27392,
           "2-4": 3715,
           "5-8": 254,
-          "cpu_only": 155602
+          "cpu_only": 155591
         },
         "success_rate": 0.8588
       },
       "gpu_hours_by_model": {
-        "unspecified": 84940.51
+        "unspecified": 84959.69
       },
       "gpu_hours_by_partition": {
-        "general": 75963.65,
+        "general": 75978.84,
         "ai+s": 4648.57,
         "complementary-ai": 2046.94,
-        "litian": 1141.84,
+        "litian": 1145.83,
         "Monsoon": 1090.85,
         "clab": 40.58,
         "dev": 5.78,
         "veitch": 2.36
       },
       "gpu_hours_by_qos": {
-        "general": 69967.71,
-        "normal": 8953.7,
+        "general": 69986.81,
+        "normal": 8953.77,
         "interactive": 4837.7,
         "monsoon": 1090.83,
         "protected": 90.58
       },
       "wait_seconds": {
-        "p50": 333.69,
-        "p90": 4478.38,
-        "p99": 36563.86,
+        "p50": 333.65,
+        "p90": 4480.8,
+        "p99": 36623.81,
         "approximate": true
       },
       "peak_daily_gpu_hours": 4980.44,
@@ -2667,14 +2667,14 @@
           "department": "Other",
           "division": "Other",
           "type": "other",
-          "gpu_hours": 84940.53,
-          "cpu_hours": 1474864.21,
-          "jobs": 186954,
+          "gpu_hours": 84959.71,
+          "cpu_hours": 1474971.98,
+          "jobs": 186952,
           "users": 112
         }
       ],
       "unique_users": 105
     }
   ],
-  "generated": "2026-08-27T20:27:41+00:00"
+  "generated": "2026-08-27T20:28:05+00:00"
 }

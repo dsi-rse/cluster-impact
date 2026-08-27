@@ -3,10 +3,10 @@
   "first_day": "2023-05-04",
   "last_day": "2026-08-27",
   "days_observed": 1212,
-  "total_gpu_hours": 1989997.64,
+  "total_gpu_hours": 1990016.82,
   "total_gpu_years": 227.17,
-  "total_cpu_hours": 16307672.98,
-  "total_jobs": 1565506,
+  "total_cpu_hours": 16307780.75,
+  "total_jobs": 1565504,
   "entries": [
     {
       "metric": "largest_job_gpus",
@@ -45,5 +45,5 @@
     }
   ],
   "researchers_all_time": 479,
-  "generated": "2026-08-27T20:27:41+00:00"
+  "generated": "2026-08-27T20:28:05+00:00"
 }
