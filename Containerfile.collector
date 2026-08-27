@@ -37,9 +37,16 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # The signing key for the CS aptly repo, committed alongside this file so the
 # build needs no `trusted=yes` and no out-of-band fetch.
-COPY deploy/uofc-cs-aptly.asc /etc/apt/trusted.gpg.d/uofc-cs-aptly.asc
+#
+# chmod is not optional: git checkout applies the host's umask, and root on
+# cluster-mgmt writes 0660, which the unprivileged `_apt` user cannot read. apt
+# then silently ignores the keyring and the repo fails to verify. Setting the
+# mode here keeps the build correct regardless of the cloning host's umask.
+# `signed-by` scopes the key to this one repo instead of the global keyring.
+COPY deploy/uofc-cs-aptly.asc /etc/apt/keyrings/uofc-cs-aptly.asc
 
-RUN echo "deb [arch=amd64] http://s10.cs.uchicago.edu/aptly/cs-release jammy jammy" \
+RUN chmod 0644 /etc/apt/keyrings/uofc-cs-aptly.asc \
+    && echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/uofc-cs-aptly.asc] http://s10.cs.uchicago.edu/aptly/cs-release jammy jammy" \
       > /etc/apt/sources.list.d/uofc-cs.list \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
