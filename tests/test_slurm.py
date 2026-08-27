@@ -3,6 +3,8 @@ from datetime import date, datetime
 from collector.sources.slurm import (
     JobRecord,
     SlurmSource,
+    drop_implausible,
+    implausible_reason,
     parse_alloc_tres,
     parse_gres,
     split_across_days,
@@ -106,3 +108,49 @@ def test_utilization_available_excludes_downtime():
     assert report.down == 345600
     assert report.available == 3456000 - 345600
     assert report.availability_rate == (3456000 - 345600) / 3456000
+
+
+# A real orphaned record from this cluster: submitted 2024-03-28, still
+# reported RUNNING with no End, ElapsedRaw 74387706 (861 days). sacct computes
+# elapsed for such a record as (now - start), so it grows every day forever.
+_ZOMBIE = (
+    "2|lup|general_group|general|normal|RUNNING|2024-03-28T16:42:15|"
+    "2024-03-28T16:42:15|Unknown|74387706|billing=35,cpu=1,gres/gpu=1,mem=128G,node=1|1|1|0:0"
+)
+_REAL = (
+    "999|someone|general_group|general|general|COMPLETED|2026-08-25T01:00:00|"
+    "2026-08-25T01:00:00|2026-08-25T09:00:00|28800|"
+    "billing=8,cpu=8,gres/gpu=2,mem=64G,node=1|1|8|0:0"
+)
+
+
+def test_orphaned_running_record_is_identified():
+    job = JobRecord.parse(_ZOMBIE)
+    assert job.state == "RUNNING"
+    assert job.end is None
+    assert implausible_reason(job, 96) == "stale-running"
+
+
+def test_a_real_eight_hour_job_is_plausible():
+    job = JobRecord.parse(_REAL)
+    assert job.elapsed_seconds == 28800
+    assert implausible_reason(job, 96) is None
+
+
+def test_overlong_finished_job_is_flagged_distinctly():
+    # A COMPLETED record beyond the ceiling is a different problem: it means a
+    # partition limit was raised and max_job_hours needs revisiting.
+    job = JobRecord.parse(_REAL.replace("|28800|", "|900000|"))
+    assert implausible_reason(job, 96) == "over-max-walltime"
+
+
+def test_ceiling_of_zero_disables_the_check():
+    assert implausible_reason(JobRecord.parse(_ZOMBIE), 0) is None
+
+
+def test_drop_implausible_reports_what_it_removed():
+    jobs = [JobRecord.parse(_ZOMBIE), JobRecord.parse(_REAL), JobRecord.parse(_ZOMBIE)]
+    kept, dropped = drop_implausible(jobs, 96)
+    assert len(kept) == 1
+    assert kept[0].job_id == "999"
+    assert dropped == {"stale-running": 2}

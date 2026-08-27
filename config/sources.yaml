@@ -25,6 +25,20 @@ sources:
     sinfo_bin: sinfo
     # Chunk backfill queries. A multi-year sacct range will hammer slurmdbd.
     backfill_chunk_days: 7
+    # Ceiling on how long a single job can plausibly have run, in hours.
+    #
+    # Why this is needed: a job that was RUNNING when the controller lost track
+    # of it never receives an End time, and sacct then reports ElapsedRaw as
+    # (now - start), which grows without bound. Three such records from
+    # 2024-03-28 were setting the site's "longest job" record at 20,663 hours
+    # (861 days) and its "largest job" record at 30,259 GPU-hours.
+    #
+    # The value is NOT the 12h that `general` allows. Partition MaxTime differs
+    # per partition and `Monsoon` permits 3-00:00:00, so a 72h job is legitimate
+    # today. 96h is Monsoon's limit plus headroom, which discards the absurd
+    # without discarding real long jobs or guessing at historical limits.
+    # Raise it if a partition limit ever exceeds this; set to 0 to disable.
+    max_job_hours: 96
     # States counted as "the job ran and finished on purpose".
     success_states: [COMPLETED]
     # Everything else is bucketed by name: FAILED, TIMEOUT, OUT_OF_MEMORY,

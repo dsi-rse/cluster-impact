@@ -14,7 +14,7 @@ from .runner import CommandError, FixtureRunner, Runner, SubprocessRunner
 from .sources.dcgm import DcgmSource
 from .sources.directory import DirectorySource
 from .sources.prometheus import PrometheusSource
-from .sources.slurm import SlurmSource, UtilizationReport
+from .sources.slurm import SlurmSource, UtilizationReport, drop_implausible
 from .sources.storage import StorageSource
 from .state import MemoryStateStore, StateStore, utc_now_iso
 from .transform import derive, privacy
@@ -50,6 +50,15 @@ def _collect_window(
     window_end = _midnight(end)
 
     jobs = slurm.fetch_jobs(window_start, window_end)
+
+    # Orphaned records — a job sacct still believes is RUNNING has its elapsed
+    # computed as (now - start) and grows forever. Left in, they set impossible
+    # records and add phantom allocation to every day they span.
+    max_job_hours = float(cfg.sources.source("slurm").get("max_job_hours") or 0)
+    jobs, dropped = drop_implausible(jobs, max_job_hours)
+    if dropped:
+        detail = ", ".join(f"{reason}={count}" for reason, count in sorted(dropped.items()))
+        warnings.append(f"dropped implausible job record(s): {detail}")
 
     utilization: dict[date, UtilizationReport] = {}
     if per_day_sreport:
@@ -149,9 +158,10 @@ def cmd_collect(args: argparse.Namespace) -> int:
     all_days = publisher.read_all_days()
 
     k = cfg.sources.k_anonymity
+    max_job_hours = float(cfg.sources.source("slurm").get("max_job_hours") or 0)
     monthly = derive.build_rollup(all_days, "monthly", cfg.cluster, state, cfg.groups, k)
     yearly = derive.build_rollup(all_days, "yearly", cfg.cluster, state, cfg.groups, k)
-    records_doc = derive.build_records(all_days, state)
+    records_doc = derive.build_records(all_days, state, max_job_hours=max_job_hours)
 
     publisher.write_rollup("monthly", monthly)
     publisher.write_rollup("yearly", yearly)
@@ -412,7 +422,14 @@ def cmd_backfill(args: argparse.Namespace) -> int:
     publisher.write_rollup(
         "yearly", derive.build_rollup(all_days, "yearly", cfg.cluster, state, cfg.groups, k)
     )
-    publisher.write_doc("records", derive.build_records(all_days, state))
+    publisher.write_doc(
+        "records",
+        derive.build_records(
+            all_days,
+            state,
+            max_job_hours=float(cfg.sources.source("slurm").get("max_job_hours") or 0),
+        ),
+    )
     publisher.write_doc("growth", derive.build_growth(all_days, state))
 
     checked = publisher.verify()

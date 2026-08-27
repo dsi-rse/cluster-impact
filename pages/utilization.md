@@ -50,15 +50,15 @@ of it is idle or unavailable.
 
 ## Where the hours go
 
-<div class="chart-card">
-  <div class="chart-card__head">
-    <h3 class="chart-card__title">By GPU model</h3>
-  </div>
-  <p class="chart-card__sub">
-    Demand is rarely uniform across generations — this is the chart that tells
-    you which hardware to buy next.
-  </p>
-  <div id="chart-models" class="chart"></div>
+<div class="data-state data-state--info">
+  <span class="data-state__title">Demand by GPU model is not available</span>
+  Slurm's accounting on this cluster records that a job used a GPU, but not
+  which model — <code>AccountingStorageTRES</code> tracks <code>gres/gpu</code>
+  with no per-model breakdown, so every GPU-hour arrives unattributed. Jobs
+  <em>can</em> request a specific model and the scheduler honours it; the type
+  simply is not retained in the accounting record. Until that changes there is
+  no honest way to chart demand per generation, so nothing is charted here.
+  The installed mix is on <a href="{{ '/capacity/' | relative_url }}">Capacity</a>.
 </div>
 
 <div class="chart-card">
@@ -93,7 +93,6 @@ of it is idle or unavailable.
     Impact.freshness('#freshness');
     Impact.utilizationTrend('chart-utilization', { days: 365 });
     Impact.utilizationRate('chart-rate', { days: 365 });
-    Impact.stackedByKey('chart-models', 'gpu_hours_by_model', { days: 180 });
     Impact.stackedByKey('chart-partitions', 'gpu_hours_by_partition', { days: 180 });
     Impact.stackedByKey('chart-qos', 'gpu_hours_by_qos', { days: 180 });
     Impact.hourHeatmap('chart-heatmap', { days: 90 });

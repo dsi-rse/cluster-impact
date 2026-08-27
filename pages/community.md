@@ -16,7 +16,6 @@ institutional infrastructure from one lab's private machine.
   {% include stat-tile.html label="Researchers" value=d.unique_users_trailing_year note="Distinct people who ran at least one job in the last 12 months." %}
   {% include stat-tile.html label="Labs & courses" value=s.labs_named_trailing_year note="Named groups meeting the anonymity threshold." %}
   {% include stat-tile.html label="Departments" value=s.departments_trailing_year note="Distinct departments represented." %}
-  {% include stat-tile.html label="Divisions" value=s.divisions_trailing_year note="Distinct University divisions represented." %}
 </div>
 
 <div class="data-state data-state--info">

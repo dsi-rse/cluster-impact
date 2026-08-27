@@ -13,7 +13,13 @@ from collector.transform.aggregate import (
     safe_key,
     size_bucket,
 )
-from collector.transform.derive import build_rollup, estimate_cost_avoided
+from collector.transform.derive import (
+    blended_usd_per_gpu_hour,
+    build_records,
+    build_rollup,
+    cost_avoided,
+    estimate_cost_avoided,
+)
 from collector.transform.privacy import SAFE_TOKEN
 
 CONFIG_DIR = Path(__file__).parent / "config"
@@ -247,3 +253,122 @@ def test_unpriceable_hours_are_withheld_not_published_as_zero(cfg):
     assert mixed == pytest.approx(220.0)
     # Genuinely no usage is a real zero, not a withholding.
     assert estimate_cost_avoided({}, cfg.cluster) == 0.0
+
+
+# ---------------------------------------------------------------- records
+# A job sacct still believes is RUNNING has ElapsedRaw computed as
+# (now - start), so an orphaned record grows without bound. Three such records
+# were publishing a "longest job" of 20,663 hours (861 days) on a cluster whose
+# longest partition limit is 3 days.
+
+
+def _day(date_str, longest=1.0, largest_gpu_hours=1.0, largest_gpus=1):
+    return {
+        "date": date_str,
+        "gpu_hours": {
+            "allocated": 10.0,
+            "available": 20.0,
+            "reported": 24.0,
+            "down": 4.0,
+            "idle": 10.0,
+        },
+        "cpu_hours_allocated": 5.0,
+        "utilization": {
+            "available": 0.5,
+            "installed": 0.42,
+            "availability": 0.83,
+            "from_sreport": True,
+        },
+        "jobs": {
+            "total": 1,
+            "by_state": {"COMPLETED": 1},
+            "by_size": {"1": 1},
+            "success_rate": 1.0,
+        },
+        "gpu_hours_by_model": {"unspecified": 10.0},
+        "gpu_hours_by_partition": {"general": 10.0},
+        "gpu_hours_by_qos": {"general": 10.0},
+        "active_users": 1,
+        "wait_seconds": {"p50": 1.0, "p90": 1.0, "p99": 1.0, "samples": 1},
+        "hourly_gpu_hours": [0.0] * 24,
+        "records": {
+            "largest_job_gpus": largest_gpus,
+            "largest_job_gpu_hours": largest_gpu_hours,
+            "longest_job_hours": longest,
+            "max_nodes_in_job": 1,
+        },
+        "groups": [],
+    }
+
+
+def _metric(doc, name):
+    for entry in doc["entries"]:
+        if entry["metric"] == name:
+            return entry
+    return None
+
+
+def test_impossible_duration_records_are_rejected():
+    days = [
+        _day("2024-03-28", longest=20663.6, largest_gpu_hours=30259.1, largest_gpus=2),
+        _day("2026-08-25", longest=11.5, largest_gpu_hours=92.0, largest_gpus=8),
+    ]
+    doc = build_records(days, max_job_hours=96)
+    # The real 11.5h day wins, not the 861-day artifact.
+    assert _metric(doc, "longest_job_hours")["value"] == 11.5
+    assert _metric(doc, "longest_job_hours")["date"] == "2026-08-25"
+    # largest_job_gpu_hours is bounded by that day's own GPU count x the ceiling
+    # (2 x 96 = 192), so 30259.1 cannot win either.
+    assert _metric(doc, "largest_job_gpu_hours")["value"] == 92.0
+    assert doc["implausible_day_records_rejected"] == 2
+
+
+def test_records_ceiling_is_opt_in():
+    # max_job_hours=0 disables the filter, so old behaviour is preserved.
+    days = [_day("2024-03-28", longest=20663.6, largest_gpus=2)]
+    doc = build_records(days, max_job_hours=0)
+    assert _metric(doc, "longest_job_hours")["value"] == 20663.6
+    assert doc["implausible_day_records_rejected"] == 0
+
+
+def test_a_legitimate_long_job_is_not_rejected():
+    # Monsoon allows 3 days; a 72h job is real and must survive a 96h ceiling.
+    days = [_day("2026-08-01", longest=71.9, largest_gpu_hours=575.2, largest_gpus=8)]
+    doc = build_records(days, max_job_hours=96)
+    assert _metric(doc, "longest_job_hours")["value"] == 71.9
+    assert doc["implausible_day_records_rejected"] == 0
+
+
+# ------------------------------------------------------------- blended cost
+
+
+def test_blended_rate_is_weighted_by_installed_mix(cfg):
+    # test config: a100 8, a40 8, l40s 16, h100 16, h200 8 = 56 GPUs
+    # 8*2.20 + 8*1.10 + 16*1.40 + 16*3.20 + 8*4.00 = 132.00 over 56 GPUs
+    assert blended_usd_per_gpu_hour(cfg.cluster) == pytest.approx(132.0 / 56)
+
+
+def test_blended_rate_refuses_a_partial_price_table(cfg):
+    cfg.cluster.cloud_pricing["usd_per_gpu_hour"]["h200"] = None
+    # Averaging over only the priced models would report a rate that is too
+    # low, so it declines instead.
+    assert blended_usd_per_gpu_hour(cfg.cluster) is None
+
+
+def test_cost_avoided_prefers_per_model_and_says_so(cfg):
+    usd, basis = cost_avoided({"a100": 100.0}, 100.0, cfg.cluster)
+    assert basis == "per_model"
+    assert usd == pytest.approx(220.0)
+
+
+def test_cost_avoided_falls_back_to_blended_when_models_are_unknown(cfg):
+    # This is the real cluster's situation: AccountingStorageTRES has no typed
+    # gres, so every GPU-hour is "unspecified" and unpriceable per model.
+    usd, basis = cost_avoided({"unspecified": 1000.0}, 1000.0, cfg.cluster)
+    assert basis == "blended"
+    assert usd == pytest.approx(1000.0 * 132.0 / 56, abs=0.01)
+
+
+def test_cost_avoided_still_withholds_without_a_sourced_table(cfg):
+    cfg.cluster.cloud_pricing = {**cfg.cluster.cloud_pricing, "source": None}
+    assert cost_avoided({"unspecified": 1000.0}, 1000.0, cfg.cluster) == (None, None)

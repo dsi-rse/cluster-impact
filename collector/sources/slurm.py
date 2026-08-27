@@ -204,6 +204,45 @@ class JobRecord:
         return out
 
 
+def implausible_reason(job: JobRecord, max_hours: float) -> str | None:
+    """Why this record cannot describe a real job, or None if it looks real.
+
+    sacct computes ElapsedRaw for a job it still believes is RUNNING as
+    (now - start). A job that was running when the controller lost track of it
+    never receives an End time, so its elapsed grows without bound — three such
+    records from 2024-03-28 were setting this site's "longest job" record at 861
+    days. Those are accounting artifacts, not jobs, and they distort both the
+    records wall and the allocation totals for every day they span.
+
+    Returning a reason rather than a bool so the caller can report WHICH kind of
+    bad record it dropped; a sudden run of `over-max-walltime` means a partition
+    limit was raised and `max_job_hours` needs revisiting, which is a very
+    different problem from an orphaned record.
+    """
+    if max_hours <= 0:
+        return None
+    if job.elapsed_seconds <= max_hours * 3600:
+        return None
+    if job.end is None and job.state == "RUNNING":
+        return "stale-running"
+    return "over-max-walltime"
+
+
+def drop_implausible(
+    jobs: list[JobRecord], max_hours: float
+) -> tuple[list[JobRecord], dict[str, int]]:
+    """Split job records into (usable, {reason: count})."""
+    kept: list[JobRecord] = []
+    dropped: dict[str, int] = {}
+    for job in jobs:
+        reason = implausible_reason(job, max_hours)
+        if reason is None:
+            kept.append(job)
+        else:
+            dropped[reason] = dropped.get(reason, 0) + 1
+    return kept, dropped
+
+
 def _field(parts: list[str], index: int) -> float:
     """One numeric column from a parsable2 row, tolerant of thousands separators."""
     try:

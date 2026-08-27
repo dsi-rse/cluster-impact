@@ -285,13 +285,80 @@ def build_rollup(
         else:
             entry["unique_users"] = None
 
-        cost = estimate_cost_avoided(entry["gpu_hours_by_model"], cluster)
+        cost, basis = cost_avoided(
+            entry["gpu_hours_by_model"],
+            entry["gpu_hours"]["allocated"],
+            cluster,
+            max(days) if days else None,
+        )
         if cost is not None:
             entry["cloud_cost_avoided_usd"] = cost
+            entry["cloud_cost_basis"] = basis
 
         periods.append(entry)
 
     return {"granularity": granularity, "periods": periods}
+
+
+def blended_usd_per_gpu_hour(cluster: ClusterConfig, day: date | None = None) -> float | None:
+    """Installed-mix-weighted average on-demand rate for one point in time.
+
+    Used when Slurm accounting cannot say WHICH model a GPU-hour was served by.
+    This cluster's AccountingStorageTRES records `gres/gpu` with no typed
+    variants, so every GPU-hour arrives model-less and the exact per-model join
+    has nothing to match.
+
+    This is an ESTIMATE and not a bound. It assumes demand is distributed across
+    models in proportion to how many of each are installed, which is not true —
+    the newest cards are usually the most contended, so this most likely
+    UNDERSTATES. Callers must label it as an estimate; `cost_avoided` returns a
+    basis string precisely so the page can.
+
+    Returns None if any installed model lacks a price, rather than quietly
+    averaging over a partial fleet and reporting a rate that is too low.
+    """
+    snapshot = (
+        cluster.capacity_on(day)
+        if day is not None
+        else (cluster.capacity_timeline[-1] if cluster.capacity_timeline else None)
+    )
+    if snapshot is None:
+        return None
+    prices = cluster.priced_models()
+    total_gpus = sum(snapshot.gpus.values())
+    if total_gpus <= 0:
+        return None
+    if any(model not in prices for model in snapshot.gpus):
+        return None
+    weighted = sum(prices[model] * count for model, count in snapshot.gpus.items())
+    return weighted / total_gpus
+
+
+def cost_avoided(
+    gpu_hours_by_model: dict[str, float],
+    total_gpu_hours: float,
+    cluster: ClusterConfig,
+    day: date | None = None,
+) -> tuple[float | None, str | None]:
+    """Cost avoided plus the basis it was computed on.
+
+    Prefers the exact per-model join. Falls back to the installed-mix blend
+    when no GPU-hour can be attributed to a priced model. Returns
+    (None, None) when the price table itself is not publishable, which keeps
+    the existing "withhold rather than guess" rule intact for that case.
+    """
+    ok, _reason = cluster.pricing_is_publishable()
+    if not ok:
+        return None, None
+
+    exact = estimate_cost_avoided(gpu_hours_by_model, cluster)
+    if exact is not None:
+        return exact, "per_model"
+
+    rate = blended_usd_per_gpu_hour(cluster, day)
+    if rate is None or total_gpu_hours <= 0:
+        return None, None
+    return round(total_gpu_hours * rate, 2), "blended"
 
 
 def estimate_cost_avoided(
@@ -329,18 +396,55 @@ def estimate_cost_avoided(
     return round(total, 2)
 
 
-def build_records(day_records: list[dict], state: StateStore | None = None) -> dict[str, Any]:
-    """All-time superlatives. The wall of headline numbers."""
+def build_records(
+    day_records: list[dict],
+    state: StateStore | None = None,
+    max_job_hours: float = 0.0,
+) -> dict[str, Any]:
+    """All-time superlatives. The wall of headline numbers.
+
+    `max_job_hours` rejects day records whose duration-derived maxima cannot
+    describe a real job. This filter lives here, and not only at the source,
+    for a specific reason: these values are read back out of ALREADY PUBLISHED
+    day files, so a bad value baked into 2024-03.json would keep winning the
+    all-time record on every future run. Applying the ceiling at read time
+    heals the published history on the next ordinary run, with no need to
+    re-query slurmdbd for three years of data.
+    """
     if not day_records:
         return {"available": False}
 
+    rejected = 0
+
+    def ceiling_for(label: str, record: dict) -> float | None:
+        """Upper bound for a metric on one day, or None if it is unbounded."""
+        if max_job_hours <= 0:
+            return None
+        if label == "longest_job_hours":
+            return max_job_hours
+        if label == "largest_job_gpu_hours":
+            # A job cannot accrue more GPU-hours than its own GPU count times
+            # the longest it could have run. Using the same day's
+            # largest_job_gpus keeps the bound tight and self-consistent
+            # instead of guessing a cluster-wide maximum.
+            gpus = (record.get("records") or {}).get("largest_job_gpus")
+            if isinstance(gpus, (int, float)) and not isinstance(gpus, bool) and gpus > 0:
+                return gpus * max_job_hours
+            return None
+        return None
+
     def best(path: tuple[str, ...], label: str) -> dict[str, Any] | None:
+        nonlocal rejected
         winner = None
         for record in day_records:
             node: Any = record
             for key in path:
                 node = (node or {}).get(key) if isinstance(node, dict) else None
             if not isinstance(node, (int, float)) or isinstance(node, bool):
+                continue
+            limit = ceiling_for(label, record)
+            if limit is not None and node > limit:
+                rejected += 1
                 continue
             if winner is None or node > winner[1]:
                 winner = (record["date"], node)
@@ -371,6 +475,10 @@ def build_records(day_records: list[dict], state: StateStore | None = None) -> d
         "total_cpu_hours": round(_sum(day_records, "cpu_hours_allocated"), 2),
         "total_jobs": int(_sum(day_records, "jobs", "total")),
         "entries": [e for e in entries if e is not None],
+        # Non-zero means published day records still contain impossible maxima
+        # (orphaned RUNNING jobs). They are excluded from the wall above; a
+        # re-collect of the affected months is what clears them at the source.
+        "implausible_day_records_rejected": rejected,
     }
 
     if state is not None:
@@ -436,10 +544,10 @@ def build_summary(
         "success_rate_ytd": None,
         "labs_named_trailing_year": len(named_groups),
         "departments_trailing_year": len({g["department"] for g in named_groups}),
-        "divisions_trailing_year": len({g["division"] for g in named_groups}),
         "total_gpu_years": records.get("total_gpu_years"),
         "unique_users_trailing_year": None,
         "cloud_cost_avoided_ytd_usd": None,
+        "cloud_cost_basis": None,
         "pricing_published": False,
     }
 
@@ -454,9 +562,15 @@ def build_summary(
         days = [date.fromisoformat(r["date"]) for r in trailing]
         summary["unique_users_trailing_year"] = len(state.users_between(min(days), max(days)))
 
-    cost = estimate_cost_avoided(_merge_maps(ytd, "gpu_hours_by_model"), cluster)
+    cost, basis = cost_avoided(
+        _merge_maps(ytd, "gpu_hours_by_model"),
+        _sum(ytd, "gpu_hours", "allocated"),
+        cluster,
+        max((date.fromisoformat(r["date"]) for r in ytd), default=None) if ytd else None,
+    )
     if cost is not None:
         summary["cloud_cost_avoided_ytd_usd"] = cost
+        summary["cloud_cost_basis"] = basis
         summary["pricing_published"] = True
 
     if inventory:
