@@ -33,7 +33,7 @@ ExecStartPre=/usr/bin/git -C /var/lib/cluster-impact/repo pull --rebase --quiet
 # without this, deployed behaviour silently diverges from main forever. Docker's
 # layer cache makes this near-instant when nothing changed, and a build failure
 # aborts the oneshot loudly rather than collecting with stale code.
-ExecStartPre=/usr/bin/docker build -q -f Containerfile.collector \
+ExecStartPre=/usr/bin/docker build -q -f /var/lib/cluster-impact/repo/Containerfile.collector \
     -t cluster-impact-collector:latest /var/lib/cluster-impact/repo
 
 # Runtime is docker, not podman. podman 5.5.0 is installed on cluster-mgmt but
@@ -59,6 +59,7 @@ Restart=no
 # reason to touch anything else.
 NoNewPrivileges=true
 PrivateTmp=true
+WorkingDirectory=/var/lib/cluster-impact/repo
 ProtectSystem=strict
 ProtectHome=true
 ReadWritePaths=/var/lib/cluster-impact /var/lock
