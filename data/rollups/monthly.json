@@ -55,7 +55,9 @@
           "users": 5
         }
       ],
-      "unique_users": 5
+      "unique_users": 5,
+      "cloud_cost_avoided_usd": 27581.47,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2023-06",
@@ -106,7 +108,9 @@
           "users": 5
         }
       ],
-      "unique_users": 0
+      "unique_users": 0,
+      "cloud_cost_avoided_usd": 36435.6,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2023-07",
@@ -157,7 +161,9 @@
           "users": 5
         }
       ],
-      "unique_users": 0
+      "unique_users": 0,
+      "cloud_cost_avoided_usd": 38562.2,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2023-08",
@@ -208,7 +214,9 @@
           "users": 5
         }
       ],
-      "unique_users": 0
+      "unique_users": 0,
+      "cloud_cost_avoided_usd": 38562.2,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2023-09",
@@ -259,7 +267,9 @@
           "users": 5
         }
       ],
-      "unique_users": 0
+      "unique_users": 0,
+      "cloud_cost_avoided_usd": 37318.25,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2023-10",
@@ -310,7 +320,9 @@
           "users": 5
         }
       ],
-      "unique_users": 0
+      "unique_users": 0,
+      "cloud_cost_avoided_usd": 38562.2,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2023-11",
@@ -370,7 +382,9 @@
           "users": 10
         }
       ],
-      "unique_users": 6
+      "unique_users": 6,
+      "cloud_cost_avoided_usd": 37580.05,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2023-12",
@@ -435,7 +449,9 @@
           "users": 41
         }
       ],
-      "unique_users": 38
+      "unique_users": 38,
+      "cloud_cost_avoided_usd": 50967.87,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2024-01",
@@ -500,7 +516,9 @@
           "users": 72
         }
       ],
-      "unique_users": 70
+      "unique_users": 70,
+      "cloud_cost_avoided_usd": 66292.75,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2024-02",
@@ -567,7 +585,9 @@
           "users": 79
         }
       ],
-      "unique_users": 80
+      "unique_users": 80,
+      "cloud_cost_avoided_usd": 91400.38,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2024-03",
@@ -637,7 +657,9 @@
           "users": 101
         }
       ],
-      "unique_users": 101
+      "unique_users": 101,
+      "cloud_cost_avoided_usd": 63472.38,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2024-04",
@@ -707,7 +729,9 @@
           "users": 88
         }
       ],
-      "unique_users": 89
+      "unique_users": 89,
+      "cloud_cost_avoided_usd": 72632.04,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2024-05",
@@ -774,7 +798,9 @@
           "users": 88
         }
       ],
-      "unique_users": 89
+      "unique_users": 89,
+      "cloud_cost_avoided_usd": 88903.12,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2024-06",
@@ -840,7 +866,9 @@
           "users": 61
         }
       ],
-      "unique_users": 60
+      "unique_users": 60,
+      "cloud_cost_avoided_usd": 48484.89,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2024-07",
@@ -906,7 +934,9 @@
           "users": 71
         }
       ],
-      "unique_users": 70
+      "unique_users": 70,
+      "cloud_cost_avoided_usd": 79991.82,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2024-08",
@@ -971,7 +1001,9 @@
           "users": 68
         }
       ],
-      "unique_users": 68
+      "unique_users": 68,
+      "cloud_cost_avoided_usd": 105539.31,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2024-09",
@@ -1038,7 +1070,9 @@
           "users": 69
         }
       ],
-      "unique_users": 69
+      "unique_users": 69,
+      "cloud_cost_avoided_usd": 121843.28,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2024-10",
@@ -1105,7 +1139,9 @@
           "users": 107
         }
       ],
-      "unique_users": 106
+      "unique_users": 106,
+      "cloud_cost_avoided_usd": 120094.88,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2024-11",
@@ -1172,7 +1208,9 @@
           "users": 95
         }
       ],
-      "unique_users": 94
+      "unique_users": 94,
+      "cloud_cost_avoided_usd": 106216.38,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2024-12",
@@ -1240,7 +1278,9 @@
           "users": 76
         }
       ],
-      "unique_users": 75
+      "unique_users": 75,
+      "cloud_cost_avoided_usd": 91557.44,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2025-01",
@@ -1310,7 +1350,9 @@
           "users": 111
         }
       ],
-      "unique_users": 111
+      "unique_users": 111,
+      "cloud_cost_avoided_usd": 126962.09,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2025-02",
@@ -1378,7 +1420,9 @@
           "users": 118
         }
       ],
-      "unique_users": 117
+      "unique_users": 117,
+      "cloud_cost_avoided_usd": 113351.35,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2025-03",
@@ -1449,7 +1493,9 @@
           "users": 120
         }
       ],
-      "unique_users": 120
+      "unique_users": 120,
+      "cloud_cost_avoided_usd": 146290.26,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2025-04",
@@ -1517,7 +1563,9 @@
           "users": 94
         }
       ],
-      "unique_users": 90
+      "unique_users": 90,
+      "cloud_cost_avoided_usd": 121535.04,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2025-05",
@@ -1586,7 +1634,9 @@
           "users": 102
         }
       ],
-      "unique_users": 100
+      "unique_users": 100,
+      "cloud_cost_avoided_usd": 118451.66,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2025-06",
@@ -1654,7 +1704,9 @@
           "users": 86
         }
       ],
-      "unique_users": 84
+      "unique_users": 84,
+      "cloud_cost_avoided_usd": 89881.15,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2025-07",
@@ -1723,7 +1775,9 @@
           "users": 99
         }
       ],
-      "unique_users": 96
+      "unique_users": 96,
+      "cloud_cost_avoided_usd": 130841.13,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2025-08",
@@ -1792,7 +1846,9 @@
           "users": 86
         }
       ],
-      "unique_users": 84
+      "unique_users": 84,
+      "cloud_cost_avoided_usd": 116819.42,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2025-09",
@@ -1863,7 +1919,9 @@
           "users": 89
         }
       ],
-      "unique_users": 88
+      "unique_users": 88,
+      "cloud_cost_avoided_usd": 128394.66,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2025-10",
@@ -1935,7 +1993,9 @@
           "users": 111
         }
       ],
-      "unique_users": 110
+      "unique_users": 110,
+      "cloud_cost_avoided_usd": 176243.19,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2025-11",
@@ -2005,7 +2065,9 @@
           "users": 107
         }
       ],
-      "unique_users": 106
+      "unique_users": 106,
+      "cloud_cost_avoided_usd": 184283.25,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2025-12",
@@ -2076,7 +2138,9 @@
           "users": 94
         }
       ],
-      "unique_users": 91
+      "unique_users": 91,
+      "cloud_cost_avoided_usd": 138625.29,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2026-01",
@@ -2150,7 +2214,9 @@
           "users": 113
         }
       ],
-      "unique_users": 111
+      "unique_users": 111,
+      "cloud_cost_avoided_usd": 176850.23,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2026-02",
@@ -2223,7 +2289,9 @@
           "users": 109
         }
       ],
-      "unique_users": 108
+      "unique_users": 108,
+      "cloud_cost_avoided_usd": 173632.06,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2026-03",
@@ -2294,7 +2362,9 @@
           "users": 126
         }
       ],
-      "unique_users": 123
+      "unique_users": 123,
+      "cloud_cost_avoided_usd": 202913.89,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2026-04",
@@ -2366,7 +2436,9 @@
           "users": 135
         }
       ],
-      "unique_users": 136
+      "unique_users": 136,
+      "cloud_cost_avoided_usd": 218426.01,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2026-05",
@@ -2442,7 +2514,9 @@
           "users": 127
         }
       ],
-      "unique_users": 125
+      "unique_users": 125,
+      "cloud_cost_avoided_usd": 258021.68,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2026-06",
@@ -2516,7 +2590,9 @@
           "users": 108
         }
       ],
-      "unique_users": 104
+      "unique_users": 104,
+      "cloud_cost_avoided_usd": 294969.59,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2026-07",
@@ -2595,69 +2671,71 @@
           "users": 138
         }
       ],
-      "unique_users": 133
+      "unique_users": 133,
+      "cloud_cost_avoided_usd": 227117.69,
+      "cloud_cost_basis": "blended"
     },
     {
       "period": "2026-08",
       "days": 27,
       "gpu_hours": {
-        "allocated": 84959.69,
-        "available": 93899.36,
-        "reported": 104977.99,
-        "down": 11078.62
+        "allocated": 82923.16,
+        "available": 94495.24,
+        "reported": 105633.99,
+        "down": 11138.74
       },
-      "cpu_hours_allocated": 1474971.97,
+      "cpu_hours_allocated": 1468644.4,
       "utilization": {
-        "available": 0.9048,
-        "installed": 0.8093,
-        "availability": 0.8945
+        "available": 0.8775,
+        "installed": 0.785,
+        "availability": 0.8946
       },
       "jobs": {
-        "total": 186952,
+        "total": 188118,
         "by_state": {
-          "CANCELLED": 6016,
-          "COMPLETED": 160327,
-          "FAILED": 15807,
+          "CANCELLED": 6060,
+          "COMPLETED": 161536,
+          "FAILED": 15821,
           "NODE_FAIL": 17,
-          "OUT_OF_MEMORY": 256,
-          "PENDING": 88,
-          "PREEMPTED": 22,
-          "REQUEUED": 32,
-          "RUNNING": 150,
-          "TIMEOUT": 4237
+          "OUT_OF_MEMORY": 264,
+          "PENDING": 23,
+          "PREEMPTED": 25,
+          "REQUEUED": 31,
+          "RUNNING": 1,
+          "TIMEOUT": 4340
         },
         "by_size": {
-          "1": 27392,
-          "2-4": 3715,
-          "5-8": 254,
-          "cpu_only": 155591
+          "1": 27607,
+          "2-4": 3716,
+          "5-8": 255,
+          "cpu_only": 156540
         },
-        "success_rate": 0.8588
+        "success_rate": 0.8589
       },
       "gpu_hours_by_model": {
-        "unspecified": 84959.69
+        "unspecified": 82923.16
       },
       "gpu_hours_by_partition": {
-        "general": 75978.84,
+        "general": 73945.99,
         "ai+s": 4648.57,
         "complementary-ai": 2046.94,
-        "litian": 1145.83,
+        "litian": 1141.84,
         "Monsoon": 1090.85,
-        "clab": 40.58,
+        "clab": 40.89,
         "dev": 5.78,
         "veitch": 2.36
       },
       "gpu_hours_by_qos": {
-        "general": 69986.81,
-        "normal": 8953.77,
-        "interactive": 4837.7,
+        "general": 69803.89,
+        "normal": 7101.01,
+        "interactive": 4836.85,
         "monsoon": 1090.83,
         "protected": 90.58
       },
       "wait_seconds": {
-        "p50": 333.65,
-        "p90": 4480.8,
-        "p99": 36623.81,
+        "p50": 336.62,
+        "p90": 4487.34,
+        "p99": 38163.32,
         "approximate": true
       },
       "peak_daily_gpu_hours": 4980.44,
@@ -2667,14 +2745,16 @@
           "department": "Other",
           "division": "Other",
           "type": "other",
-          "gpu_hours": 84959.71,
-          "cpu_hours": 1474971.98,
-          "jobs": 186952,
+          "gpu_hours": 82923.18,
+          "cpu_hours": 1468644.42,
+          "jobs": 188118,
           "users": 112
         }
       ],
-      "unique_users": 105
+      "unique_users": 105,
+      "cloud_cost_avoided_usd": 276174.57,
+      "cloud_cost_basis": "blended"
     }
   ],
-  "generated": "2026-08-27T20:28:05+00:00"
+  "generated": "2026-08-28T14:57:28+00:00"
 }
