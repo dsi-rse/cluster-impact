@@ -14,6 +14,12 @@ Type=oneshot
 # below makes /root unreadable to this unit.
 Environment="GIT_SSH_COMMAND=ssh -i /etc/cluster-impact/deploy_key -o IdentitiesOnly=yes -o UserKnownHostsFile=/etc/cluster-impact/known_hosts"
 
+# `docker build` writes client config/metadata, and ProtectSystem=strict plus
+# ProtectHome=true leave it nowhere to put it — the first timer-driven run died
+# with "mkdir /root/.docker: read-only file system". `docker run` never needed
+# this, which is why manual runs passed. Point it somewhere in ReadWritePaths.
+Environment=DOCKER_CONFIG=/var/lib/cluster-impact/.docker
+
 # A long backfill and a nightly run must not overlap: both write the same
 # month files and the same on-cluster state.
 ExecStartPre=/usr/bin/flock -n /var/lock/cluster-impact.lock true
