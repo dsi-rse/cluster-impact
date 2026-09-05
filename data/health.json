@@ -1,7 +1,7 @@
 {
-  "last_run": "2026-09-04T08:31:37+00:00",
-  "window_start": "2026-08-28",
-  "window_end": "2026-09-04",
+  "last_run": "2026-09-05T08:36:18+00:00",
+  "window_start": "2026-08-29",
+  "window_end": "2026-09-05",
   "days_written": 7,
   "mode": "live",
   "warnings": 1,
@@ -10,5 +10,5 @@
     "storage": "unavailable",
     "dcgm": "disabled"
   },
-  "generated": "2026-09-04T08:31:37+00:00"
+  "generated": "2026-09-05T08:36:18+00:00"
 }
