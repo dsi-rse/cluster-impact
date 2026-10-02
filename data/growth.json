@@ -36,7 +36,8 @@
     "2026-06": 13,
     "2026-07": 26,
     "2026-08": 2,
-    "2026-09": 15
+    "2026-09": 15,
+    "2026-10": 3
   },
   "retention": [
     {
@@ -212,7 +213,7 @@
       "size": 25,
       "month_3": 0.56,
       "month_6": 0.36,
-      "month_12": null
+      "month_12": 0.08
     },
     {
       "cohort": "2025-11",
@@ -253,7 +254,7 @@
       "cohort": "2026-04",
       "size": 17,
       "month_3": 0.4706,
-      "month_6": null,
+      "month_6": 0.3529,
       "month_12": null
     },
     {
@@ -273,7 +274,7 @@
     {
       "cohort": "2026-07",
       "size": 26,
-      "month_3": null,
+      "month_3": 0.0,
       "month_6": null,
       "month_12": null
     },
@@ -290,7 +291,14 @@
       "month_3": null,
       "month_6": null,
       "month_12": null
+    },
+    {
+      "cohort": "2026-10",
+      "size": 3,
+      "month_3": null,
+      "month_6": null,
+      "month_12": null
     }
   ],
-  "generated": "2026-10-01T08:44:17+00:00"
+  "generated": "2026-10-02T08:38:50+00:00"
 }
