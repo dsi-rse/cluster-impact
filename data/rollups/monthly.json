@@ -2770,7 +2770,7 @@
         "availability": 0.9068
       },
       "jobs": {
-        "total": 427865,
+        "total": 427862,
         "by_state": {
           "CANCELLED": 9174,
           "COMPLETED": 342026,
@@ -2778,7 +2778,7 @@
           "FAILED": 71349,
           "NODE_FAIL": 8,
           "OUT_OF_MEMORY": 201,
-          "PENDING": 24,
+          "PENDING": 21,
           "PREEMPTED": 159,
           "REQUEUED": 5,
           "TIMEOUT": 4918
@@ -2787,7 +2787,7 @@
           "1": 64133,
           "2-4": 9699,
           "5-8": 346,
-          "cpu_only": 353687
+          "cpu_only": 353684
         },
         "success_rate": 0.7994
       },
@@ -2825,7 +2825,7 @@
           "type": "other",
           "gpu_hours": 75977.2,
           "cpu_hours": 1052366.16,
-          "jobs": 427865,
+          "jobs": 427862,
           "users": 114
         }
       ],
@@ -2835,82 +2835,81 @@
     },
     {
       "period": "2026-10",
-      "days": 1,
+      "days": 2,
       "gpu_hours": {
-        "allocated": 2426.07,
-        "available": 3801.15,
-        "reported": 3936.0,
-        "down": 134.85
+        "allocated": 4558.12,
+        "available": 7412.83,
+        "reported": 7872.0,
+        "down": 459.17
       },
-      "cpu_hours_allocated": 55490.61,
+      "cpu_hours_allocated": 103643.44,
       "utilization": {
-        "available": 0.6382,
-        "installed": 0.6164,
-        "availability": 0.9657
+        "available": 0.6149,
+        "installed": 0.579,
+        "availability": 0.9417
       },
       "jobs": {
-        "total": 12196,
+        "total": 31697,
         "by_state": {
-          "CANCELLED": 269,
-          "COMPLETED": 10712,
-          "FAILED": 1106,
-          "NODE_FAIL": 1,
-          "OUT_OF_MEMORY": 4,
-          "PENDING": 18,
-          "PREEMPTED": 8,
-          "REQUEUED": 2,
-          "RUNNING": 18,
-          "TIMEOUT": 58
+          "CANCELLED": 672,
+          "COMPLETED": 29455,
+          "FAILED": 1315,
+          "OUT_OF_MEMORY": 72,
+          "PENDING": 14,
+          "PREEMPTED": 18,
+          "REQUEUED": 19,
+          "RUNNING": 17,
+          "TIMEOUT": 115
         },
         "by_size": {
-          "1": 1770,
-          "2-4": 150,
-          "5-8": 6,
-          "cpu_only": 10270
+          "1": 4079,
+          "2-4": 225,
+          "5-8": 35,
+          "cpu_only": 27358
         },
-        "success_rate": 0.8811
+        "success_rate": 0.9307
       },
       "gpu_hours_by_model": {
-        "unspecified": 2426.07
+        "unspecified": 4558.12
       },
       "gpu_hours_by_partition": {
-        "general": 2100.17,
-        "ai+s": 100.73,
-        "complementary-ai": 95.99,
-        "clab": 71.97,
-        "litian": 48.26,
-        "Monsoon": 7.62,
-        "dev": 1.32
+        "general": 3894.08,
+        "ai+s": 231.52,
+        "complementary-ai": 191.16,
+        "litian": 111.92,
+        "clab": 107.68,
+        "Monsoon": 20.01,
+        "dev": 1.75
       },
       "gpu_hours_by_qos": {
-        "general": 2181.21,
-        "interactive": 229.25,
-        "protected": 7.99,
-        "monsoon": 7.62
+        "general": 4006.29,
+        "interactive": 523.83,
+        "monsoon": 20.01,
+        "protected": 7.99
       },
       "wait_seconds": {
-        "p50": 350.0,
-        "p90": 480.0,
-        "p99": 44466.99,
+        "p50": 284.87,
+        "p90": 891.65,
+        "p99": 24928.95,
         "approximate": true
       },
-      "peak_daily_gpu_hours": 2426.07,
+      "peak_daily_gpu_hours": 2414.89,
       "groups": [
         {
           "name": "Other",
           "department": "Other",
           "division": "Other",
           "type": "other",
-          "gpu_hours": 2426.07,
-          "cpu_hours": 55490.61,
-          "jobs": 12196,
-          "users": 61
+          "gpu_hours": 4558.12,
+          "cpu_hours": 103643.44,
+          "jobs": 31697,
+          "users": 69
         }
       ],
-      "unique_users": 62,
-      "cloud_cost_avoided_usd": 8080.0,
+      "unique_users": 70,
+      "cloud_cost_avoided_usd": 15180.76,
       "cloud_cost_basis": "blended"
     }
   ],
-  "generated": "2026-10-02T08:38:49+00:00"
+  "generated": "2026-10-03T08:40:48+00:00"
 }
