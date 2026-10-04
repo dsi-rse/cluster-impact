@@ -2770,7 +2770,7 @@
         "availability": 0.9068
       },
       "jobs": {
-        "total": 427862,
+        "total": 427861,
         "by_state": {
           "CANCELLED": 9174,
           "COMPLETED": 342026,
@@ -2778,7 +2778,7 @@
           "FAILED": 71349,
           "NODE_FAIL": 8,
           "OUT_OF_MEMORY": 201,
-          "PENDING": 21,
+          "PENDING": 20,
           "PREEMPTED": 159,
           "REQUEUED": 5,
           "TIMEOUT": 4918
@@ -2787,7 +2787,7 @@
           "1": 64133,
           "2-4": 9699,
           "5-8": 346,
-          "cpu_only": 353684
+          "cpu_only": 353683
         },
         "success_rate": 0.7994
       },
@@ -2825,7 +2825,7 @@
           "type": "other",
           "gpu_hours": 75977.2,
           "cpu_hours": 1052366.16,
-          "jobs": 427862,
+          "jobs": 427861,
           "users": 114
         }
       ],
@@ -2835,62 +2835,63 @@
     },
     {
       "period": "2026-10",
-      "days": 2,
+      "days": 3,
       "gpu_hours": {
-        "allocated": 4558.12,
-        "available": 7412.83,
-        "reported": 7872.0,
-        "down": 459.17
+        "allocated": 6405.7,
+        "available": 10951.95,
+        "reported": 11808.0,
+        "down": 856.05
       },
-      "cpu_hours_allocated": 103643.44,
+      "cpu_hours_allocated": 138300.12,
       "utilization": {
-        "available": 0.6149,
-        "installed": 0.579,
-        "availability": 0.9417
+        "available": 0.5849,
+        "installed": 0.5425,
+        "availability": 0.9275
       },
       "jobs": {
-        "total": 31697,
+        "total": 65751,
         "by_state": {
-          "CANCELLED": 672,
-          "COMPLETED": 29455,
-          "FAILED": 1315,
-          "OUT_OF_MEMORY": 72,
-          "PENDING": 14,
-          "PREEMPTED": 18,
-          "REQUEUED": 19,
-          "RUNNING": 17,
-          "TIMEOUT": 115
+          "CANCELLED": 1088,
+          "COMPLETED": 53127,
+          "FAILED": 11212,
+          "NODE_FAIL": 1,
+          "OUT_OF_MEMORY": 86,
+          "PENDING": 26,
+          "PREEMPTED": 24,
+          "REQUEUED": 11,
+          "RUNNING": 8,
+          "TIMEOUT": 168
         },
         "by_size": {
-          "1": 4079,
-          "2-4": 225,
-          "5-8": 35,
-          "cpu_only": 27358
+          "1": 5245,
+          "2-4": 247,
+          "5-8": 43,
+          "cpu_only": 60216
         },
-        "success_rate": 0.9307
+        "success_rate": 0.8086
       },
       "gpu_hours_by_model": {
-        "unspecified": 4558.12
+        "unspecified": 6405.7
       },
       "gpu_hours_by_partition": {
-        "general": 3894.08,
-        "ai+s": 231.52,
-        "complementary-ai": 191.16,
-        "litian": 111.92,
-        "clab": 107.68,
-        "Monsoon": 20.01,
-        "dev": 1.75
+        "general": 5478.05,
+        "ai+s": 358.24,
+        "complementary-ai": 287.16,
+        "litian": 130.98,
+        "clab": 118.81,
+        "Monsoon": 30.47,
+        "dev": 2.0
       },
       "gpu_hours_by_qos": {
-        "general": 4006.29,
-        "interactive": 523.83,
-        "monsoon": 20.01,
-        "protected": 7.99
+        "general": 5635.57,
+        "interactive": 731.46,
+        "monsoon": 30.47,
+        "protected": 8.2
       },
       "wait_seconds": {
-        "p50": 284.87,
-        "p90": 891.65,
-        "p99": 24928.95,
+        "p50": 253.26,
+        "p90": 559.69,
+        "p99": 14165.15,
         "approximate": true
       },
       "peak_daily_gpu_hours": 2414.89,
@@ -2900,16 +2901,16 @@
           "department": "Other",
           "division": "Other",
           "type": "other",
-          "gpu_hours": 4558.12,
-          "cpu_hours": 103643.44,
-          "jobs": 31697,
-          "users": 69
+          "gpu_hours": 6405.7,
+          "cpu_hours": 138300.12,
+          "jobs": 65751,
+          "users": 71
         }
       ],
-      "unique_users": 70,
-      "cloud_cost_avoided_usd": 15180.76,
+      "unique_users": 72,
+      "cloud_cost_avoided_usd": 21334.11,
       "cloud_cost_basis": "blended"
     }
   ],
-  "generated": "2026-10-03T08:40:48+00:00"
+  "generated": "2026-10-04T08:41:47+00:00"
 }
