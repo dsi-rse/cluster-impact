@@ -1,17 +1,17 @@
 {
   "available": true,
-  "nodes_total": 32,
-  "nodes_online": 27,
-  "gpus_total": 164,
-  "gpus_online": 144,
+  "nodes_total": 31,
+  "nodes_online": 26,
+  "gpus_total": 160,
+  "gpus_online": 140,
   "gpus_by_model": {
     "a100": 60,
     "h200": 44,
-    "a40": 32,
+    "a40": 28,
     "h100": 16,
     "l40s": 12
   },
-  "cpus_total": 3296,
-  "peak_pflops_fp16": 78.0,
-  "generated": "2026-10-06T08:43:53+00:00"
+  "cpus_total": 3232,
+  "peak_pflops_fp16": 77.4,
+  "generated": "2026-10-07T08:42:30+00:00"
 }
