@@ -1,6 +1,6 @@
 {
   "month": "2026-10",
-  "generated": "2026-10-15T08:44:38+00:00",
+  "generated": "2026-10-16T08:43:17+00:00",
   "days": [
     {
       "date": "2026-10-01",
@@ -884,18 +884,18 @@
         "samples": 3921
       },
       "hourly_gpu_hours": [
-        102.48,
-        96.96,
-        93.05,
-        96.94,
-        91.35,
-        83.5,
-        81.42,
-        88.35,
-        93.93,
-        93.02,
-        95.63,
-        95.61,
+        16.96,
+        30.6,
+        48.55,
+        68.72,
+        65.14,
+        60.64,
+        67.8,
+        78.91,
+        86.64,
+        86.28,
+        90.61,
+        93.37,
         91.42,
         90.63,
         101.38,
@@ -1232,21 +1232,21 @@
     {
       "date": "2026-10-13",
       "gpu_hours": {
-        "allocated": 2936.57,
+        "allocated": 2932.6,
         "available": 3719.14,
         "reported": 3936.0,
         "down": 216.86,
         "idle": 230.17
       },
-      "cpu_hours_allocated": 34689.59,
+      "cpu_hours_allocated": 34657.8,
       "utilization": {
-        "available": 0.7896,
-        "installed": 0.7461,
+        "available": 0.7885,
+        "installed": 0.7451,
         "availability": 0.9449,
         "from_sreport": true
       },
       "jobs": {
-        "total": 5932,
+        "total": 5931,
         "by_state": {
           "CANCELLED": 138,
           "COMPLETED": 5267,
@@ -1254,28 +1254,28 @@
           "NODE_FAIL": 4,
           "OUT_OF_MEMORY": 17,
           "PENDING": 1,
-          "PREEMPTED": 6,
+          "PREEMPTED": 5,
           "TIMEOUT": 90
         },
         "by_size": {
-          "1": 1511,
+          "1": 1510,
           "2-4": 108,
           "cpu_only": 4313
         },
-        "success_rate": 0.888
+        "success_rate": 0.8882
       },
       "gpu_hours_by_model": {
-        "unspecified": 2936.57
+        "unspecified": 2932.6
       },
       "gpu_hours_by_partition": {
-        "general": 2534.74,
+        "general": 2530.76,
         "litian": 191.95,
         "clab": 180.3,
         "complementary-ai": 22.59,
         "Monsoon": 7.0
       },
       "gpu_hours_by_qos": {
-        "general": 2854.81,
+        "general": 2850.83,
         "interactive": 76.2,
         "monsoon": 4.59,
         "protected": 0.97
@@ -1283,9 +1283,9 @@
       "active_users": 68,
       "wait_seconds": {
         "p50": 218.0,
-        "p90": 4124.1,
-        "p99": 121091.9,
-        "samples": 5894
+        "p90": 4120.6,
+        "p99": 119411.28,
+        "samples": 5893
       },
       "hourly_gpu_hours": [
         129.6,
@@ -1296,11 +1296,11 @@
         112.9,
         120.19,
         120.0,
-        120.74,
-        118.24,
-        116.41,
-        117.02,
-        116.2,
+        120.41,
+        117.24,
+        115.41,
+        116.02,
+        115.55,
         114.46,
         120.85,
         116.49,
@@ -1325,9 +1325,9 @@
           "department": "Other",
           "division": "Other",
           "type": "other",
-          "gpu_hours": 2936.57,
-          "cpu_hours": 34689.59,
-          "jobs": 5932,
+          "gpu_hours": 2932.6,
+          "cpu_hours": 34657.8,
+          "jobs": 5931,
           "users": 69
         }
       ]
@@ -1335,45 +1335,43 @@
     {
       "date": "2026-10-14",
       "gpu_hours": {
-        "allocated": 3076.55,
+        "allocated": 3027.39,
         "available": 3771.13,
         "reported": 3936.0,
         "down": 164.87,
         "idle": 241.49
       },
-      "cpu_hours_allocated": 43319.2,
+      "cpu_hours_allocated": 43015.31,
       "utilization": {
-        "available": 0.8158,
-        "installed": 0.7816,
+        "available": 0.8028,
+        "installed": 0.7692,
         "availability": 0.9581,
         "from_sreport": true
       },
       "jobs": {
-        "total": 20252,
+        "total": 20243,
         "by_state": {
           "CANCELLED": 288,
-          "COMPLETED": 11745,
-          "FAILED": 8058,
+          "COMPLETED": 11746,
+          "FAILED": 8059,
           "NODE_FAIL": 5,
           "OUT_OF_MEMORY": 7,
-          "PENDING": 4,
-          "PREEMPTED": 8,
-          "REQUEUED": 2,
-          "RUNNING": 4,
-          "TIMEOUT": 131
+          "PENDING": 1,
+          "PREEMPTED": 4,
+          "TIMEOUT": 133
         },
         "by_size": {
-          "1": 1635,
-          "2-4": 103,
-          "cpu_only": 18514
+          "1": 1632,
+          "2-4": 101,
+          "cpu_only": 18510
         },
-        "success_rate": 0.5802
+        "success_rate": 0.5803
       },
       "gpu_hours_by_model": {
-        "unspecified": 3076.55
+        "unspecified": 3027.39
       },
       "gpu_hours_by_partition": {
-        "general": 2704.2,
+        "general": 2655.04,
         "clab": 158.57,
         "litian": 110.6,
         "complementary-ai": 96.0,
@@ -1381,17 +1379,17 @@
         "dev": 0.27
       },
       "gpu_hours_by_qos": {
-        "general": 3010.06,
+        "general": 2960.9,
         "interactive": 57.19,
         "monsoon": 6.92,
         "protected": 2.38
       },
-      "active_users": 69,
+      "active_users": 68,
       "wait_seconds": {
         "p50": 245.0,
-        "p90": 673.0,
-        "p99": 43255.8,
-        "samples": 20041
+        "p90": 672.0,
+        "p99": 43234.6,
+        "samples": 20035
       },
       "hourly_gpu_hours": [
         130.23,
@@ -1405,19 +1403,19 @@
         127.36,
         125.21,
         126.75,
-        127.99,
+        127.95,
         126.23,
-        119.68,
-        119.4,
-        123.27,
-        117.58,
-        114.65,
-        121.72,
-        132.54,
-        135.06,
-        141.67,
-        142.98,
-        145.21
+        119.66,
+        117.4,
+        121.27,
+        115.58,
+        112.65,
+        117.86,
+        125.96,
+        128.06,
+        134.0,
+        134.98,
+        137.21
       ],
       "records": {
         "largest_job_gpus": 4,
@@ -1431,10 +1429,114 @@
           "department": "Other",
           "division": "Other",
           "type": "other",
-          "gpu_hours": 3076.55,
-          "cpu_hours": 43319.2,
-          "jobs": 20252,
-          "users": 69
+          "gpu_hours": 3027.39,
+          "cpu_hours": 43015.31,
+          "jobs": 20243,
+          "users": 68
+        }
+      ]
+    },
+    {
+      "date": "2026-10-15",
+      "gpu_hours": {
+        "allocated": 3032.93,
+        "available": 3620.28,
+        "reported": 3936.0,
+        "down": 315.72,
+        "idle": 238.59
+      },
+      "cpu_hours_allocated": 41899.33,
+      "utilization": {
+        "available": 0.8378,
+        "installed": 0.7706,
+        "availability": 0.9198,
+        "from_sreport": true
+      },
+      "jobs": {
+        "total": 2760,
+        "by_state": {
+          "CANCELLED": 86,
+          "COMPLETED": 2038,
+          "FAILED": 431,
+          "NODE_FAIL": 2,
+          "OUT_OF_MEMORY": 1,
+          "PENDING": 44,
+          "PREEMPTED": 12,
+          "REQUEUED": 5,
+          "RUNNING": 5,
+          "TIMEOUT": 136
+        },
+        "by_size": {
+          "1": 1455,
+          "2-4": 77,
+          "cpu_only": 1228
+        },
+        "success_rate": 0.7531
+      },
+      "gpu_hours_by_model": {
+        "unspecified": 3032.93
+      },
+      "gpu_hours_by_partition": {
+        "general": 2820.63,
+        "clab": 91.02,
+        "complementary-ai": 87.37,
+        "litian": 33.57,
+        "dev": 0.33
+      },
+      "gpu_hours_by_qos": {
+        "general": 2978.15,
+        "interactive": 54.75,
+        "protected": 0.03
+      },
+      "active_users": 62,
+      "wait_seconds": {
+        "p50": 61.0,
+        "p90": 10569.8,
+        "p99": 86887.16,
+        "samples": 2682
+      },
+      "hourly_gpu_hours": [
+        136.22,
+        132.19,
+        130.51,
+        134.57,
+        126.94,
+        134.54,
+        136.32,
+        128.21,
+        125.22,
+        123.85,
+        117.57,
+        118.8,
+        118.59,
+        118.61,
+        119.53,
+        124.16,
+        131.49,
+        130.53,
+        131.32,
+        126.43,
+        119.3,
+        121.22,
+        125.31,
+        121.5
+      ],
+      "records": {
+        "largest_job_gpus": 4,
+        "largest_job_gpu_hours": 48.03,
+        "longest_job_hours": 12.07,
+        "max_nodes_in_job": 2
+      },
+      "groups": [
+        {
+          "name": "Other",
+          "department": "Other",
+          "division": "Other",
+          "type": "other",
+          "gpu_hours": 3032.93,
+          "cpu_hours": 41899.33,
+          "jobs": 2760,
+          "users": 64
         }
       ]
     }
