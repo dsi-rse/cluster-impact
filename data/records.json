@@ -1,12 +1,12 @@
 {
   "available": true,
   "first_day": "2023-05-04",
-  "last_day": "2026-10-16",
-  "days_observed": 1262,
-  "total_gpu_hours": 2113865.83,
-  "total_gpu_years": 241.31,
-  "total_cpu_hours": 18110824.73,
-  "total_jobs": 2224605,
+  "last_day": "2026-10-17",
+  "days_observed": 1263,
+  "total_gpu_hours": 2116559.27,
+  "total_gpu_years": 241.62,
+  "total_cpu_hours": 18154798.18,
+  "total_jobs": 2228324,
   "entries": [
     {
       "metric": "largest_job_gpus",
@@ -46,5 +46,5 @@
   ],
   "implausible_day_records_rejected": 6,
   "researchers_all_time": 512,
-  "generated": "2026-10-17T08:34:54+00:00"
+  "generated": "2026-10-18T08:34:36+00:00"
 }
