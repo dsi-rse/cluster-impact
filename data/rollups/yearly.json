@@ -226,70 +226,70 @@
     },
     {
       "period": "2026",
-      "days": 291,
+      "days": 292,
       "gpu_hours": {
-        "allocated": 771928.95,
-        "available": 989923.97,
-        "reported": 1042844.75,
-        "down": 52920.77
+        "allocated": 774599.34,
+        "available": 993264.04,
+        "reported": 1046780.75,
+        "down": 53516.7
       },
-      "cpu_hours_allocated": 9819509.75,
+      "cpu_hours_allocated": 9852242.18,
       "utilization": {
-        "available": 0.7798,
-        "installed": 0.7402,
-        "availability": 0.9493
+        "available": 0.7799,
+        "installed": 0.74,
+        "availability": 0.9489
       },
       "jobs": {
-        "total": 1557901,
+        "total": 1565720,
         "by_state": {
-          "CANCELLED": 61265,
-          "COMPLETED": 1279680,
+          "CANCELLED": 61406,
+          "COMPLETED": 1286929,
           "DEADLINE": 1,
-          "FAILED": 187040,
-          "NODE_FAIL": 51,
-          "OUT_OF_MEMORY": 2111,
+          "FAILED": 187377,
+          "NODE_FAIL": 55,
+          "OUT_OF_MEMORY": 2118,
           "PENDING": 97,
-          "PREEMPTED": 426,
-          "REQUEUED": 71,
-          "RUNNING": 22,
-          "TIMEOUT": 27137
+          "PREEMPTED": 432,
+          "REQUEUED": 78,
+          "RUNNING": 14,
+          "TIMEOUT": 27213
         },
         "by_size": {
-          "1": 314096,
+          "1": 315835,
           "17+": 4,
-          "2-4": 67190,
-          "5-8": 1994,
+          "2-4": 67290,
+          "5-8": 1997,
           "9-16": 88,
-          "cpu_only": 1174529
+          "cpu_only": 1180506
         },
-        "success_rate": 0.8215
+        "success_rate": 0.822
       },
       "gpu_hours_by_model": {
-        "unspecified": 771928.95
+        "unspecified": 774599.34
       },
       "gpu_hours_by_partition": {
-        "general": 639667.33,
-        "ai+s": 69509.14,
-        "complementary-ai": 23218.61,
-        "litian": 17329.85,
+        "general": 641859.07,
+        "ai+s": 69741.52,
+        "complementary-ai": 23314.61,
+        "litian": 17455.56,
         "Monsoon": 12755.07,
-        "clab": 8172.3,
+        "clab": 8196.68,
         "veitch": 1181.93,
-        "dev": 87.79,
+        "dev": 87.96,
         "DDRI": 7.39
       },
       "gpu_hours_by_qos": {
-        "general": 409002.98,
+        "general": 411609.56,
         "normal": 338516.82,
-        "interactive": 17987.39,
+        "interactive": 18051.2,
         "monsoon": 5335.71,
         "burst": 687.88,
         "protected": 398.28
       },
       "wait_seconds": {
-        "p50": 1674.88,
-        "p90": 9752.75,
-        "p99": 54262.89,
+        "p50": 1666.68,
+        "p90": 9714.34,
+        "p99": 54288.19,
         "approximate": true
       },
       "peak_daily_gpu_hours": 4980.44,
@@ -299,16 +299,16 @@
           "department": "Other",
           "division": "Other",
           "type": "other",
-          "gpu_hours": 771928.99,
-          "cpu_hours": 9819509.86,
-          "jobs": 1557901,
-          "users": 276
+          "gpu_hours": 774599.38,
+          "cpu_hours": 9852242.29,
+          "jobs": 1565720,
+          "users": 277
         }
       ],
-      "unique_users": 277,
-      "cloud_cost_avoided_usd": 2570899.95,
+      "unique_users": 278,
+      "cloud_cost_avoided_usd": 2579793.66,
       "cloud_cost_basis": "blended"
     }
   ],
-  "generated": "2026-10-19T08:40:36+00:00"
+  "generated": "2026-10-20T08:44:13+00:00"
 }
